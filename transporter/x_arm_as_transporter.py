@@ -5,15 +5,15 @@
 #  Contacts : 01165315133
 
 import threading
-from transporter.arm.base_movement import BaseMotion
 from transporter.arm.xarm_wrapper import XArmWrapperSingleton
+from transporter.xarm_scripts.base_movement import BaseMovement
 
 
 class XarmTransporter(threading.Thread):
     LEFT = 'left'
     RIGHT = 'right'
 
-    def __init__(self, motion: BaseMotion, requester, multiplier, *args, **kwargs):
+    def __init__(self, motion: BaseMovement, requester, multiplier, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.motion = motion
         self.requester = requester
