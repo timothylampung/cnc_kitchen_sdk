@@ -54,7 +54,6 @@ def move():
     }
 
     def return_to_right_requester():
-        print('return to left requester')
         from transporter.xarm_scripts.return_to_right_wok import ReturnToRightWok
         ret = ReturnToRightWok()
         ret.set_type(type)
@@ -76,6 +75,7 @@ def move():
     motion.set_requester(requester_callback=return_to_requester)
     motion.set_type(type)
     arm: XArmWrapperSingleton = XArmWrapperSingleton.get_instance()
+
     while arm.is_arm_busy():
         pass
     motion.run()
@@ -85,4 +85,4 @@ def move():
 
 if __name__ == '__main__':
     XArmWrapperSingleton()
-    app.run(host='192.168.1.14', port=5001)
+    app.run(host='192.168.1.9', port=5001)

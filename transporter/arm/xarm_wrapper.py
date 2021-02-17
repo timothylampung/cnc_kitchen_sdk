@@ -144,7 +144,8 @@ class XArmWrapperSingleton:
         c = data['cartesian']
         # print(f'{c[0]} X {c[1]} = {self.is_working_envelope(c[0], c[1], c[2])}')
         if self.is_working_envelope(c[0], c[1], c[2]):
-            self.arm.emergency_stop()
+            pass
+            # self.arm.emergency_stop()
         # if data and data['error_code'] != 0:
         #     self.arm.set_state(4)
         #     self.params['quit'] = True

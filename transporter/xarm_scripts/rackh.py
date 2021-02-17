@@ -10,7 +10,7 @@ class RackH(BaseMovement):
             self.x_arm.set_is_arm_busy(True)
             self.x_arm.initial_position()
 
-            if self.ingredient ==  'SOLID':
+            if self.ingredient == 'SOLID':
                 self.x_arm.move_join(angle=[165.4, 36.7, -110.6, 0.1, 73.9, 31.4], radius=50, wait=False)
                 self.x_arm.move_arc_line(*[-619.0, 161.1, -72.6, -179.9, 0.0, 133.9], radius=50, wait=True)
                 self.vacuum_in('ayam', 5000)
@@ -25,7 +25,7 @@ class RackH(BaseMovement):
                                          wait=True)
             else:
                 self.x_arm.move_join(angle=[154.1, 20.0, -86.7, 0.1, 66.7, -28.7], radius=50, wait=False)
-                self.x_arm.move_arc_line(*[-511.4, 248.3, -64.3, -179.9, 0.0, -177.3], radius=50,wait=True)
+                self.x_arm.move_arc_line(*[-511.4, 248.3, -64.3, -179.9, 0.0, -177.3], radius=50, wait=True)
                 self.vacuum_powder("ayam", EIG.MAX_GRANULAR)
                 self.x_arm.move_arc_line(*[-511.4, 248.3, 54.3, -179.9, 0.0, -177.3], radius=50, wait=True)
 
