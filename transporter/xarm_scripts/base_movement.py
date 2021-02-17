@@ -80,14 +80,8 @@ class BaseMovement:
         z = self.x_arm.arm.get_position()[1][2]
         print(f'Vacuuming solid at position {x}, {y}, {z}')
 
-        for a in range(2):
+        for a in range(3):
             # self.x_arm.move_arc_line(z=-118.6, wait=True)
-            self.x_arm.move_arc_line(z=-36, wait=True)
-            self.x_arm.move_arc_line(z=z, wait=True)
-
-            self.x_arm.move_arc_line(z=-36, wait=True)
-            self.x_arm.move_arc_line(z=z, wait=True)
-
             self.x_arm.move_arc_line(z=-36, wait=True)
             self.x_arm.move_arc_line(z=z, wait=True)
 
