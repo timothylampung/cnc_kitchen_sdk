@@ -9,7 +9,6 @@ class RackA(BaseMovement):
         if isinstance(self.x_arm, XArmWrapperSingleton):
             self.x_arm.set_is_arm_busy(True)
             self.x_arm.initial_position()
-
             if self.ingredient == 'SOLID':
                 self.x_arm.move_join(angle=[140.7, 4.8, -70.1, 0.0, 65.3, -9.8], radius=50, wait=False)
                 self.x_arm.move_arc_line(*[-384.0, 314.1, -82.6, -180.0, 0.1, 150.5], radius=50, wait=True)

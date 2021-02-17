@@ -99,6 +99,7 @@ class BaseMovement:
         self.x_arm.move_cylinder(volume)
 
     def run(self):
+        self.x_arm.update_parameters(speed=200, angle_speed=500)
         pass
         # if isinstance(self.xArm, XArmSDKSingleton):
         #     if self.xArm.is_connected():
