@@ -72,7 +72,7 @@ def move():
         else:
             return_to_right_requester()
 
-    motion = x_arm_motions_directory[y][x]
+    motion = x_arm_motions_directory[str(y)][str(x)]
     motion.set_requester(requester_callback=return_to_requester)
     motion.set_type(type)
     arm: XArmWrapperSingleton = XArmWrapperSingleton.get_instance()
