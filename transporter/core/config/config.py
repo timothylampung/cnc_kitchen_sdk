@@ -4,45 +4,52 @@
 #  Email : timothylampung@gmail.com
 #  Contacts : 01165315133
 
+
 class EndEffectorInstructionReg:
-    MOVE_PULLER = {
-        'code': 1,
-        'name': 'MOVE_PULLER'
+    MOVE_CYLINDER_MOTOR = {
+        'code': 100,
+        'name': 'MOVE_CYLINDER_MOTOR'
     }
-    MOVE_SYRINGE = {
-        'code': 2,
-        'name': 'MOVE_CYRINGE'
+    MOVE_PULLER_MOTOR = {
+        'code': 101,
+        'name': 'MOVE_PULLER_MOTOR'
     }
-    MOVE_CYLINDER = {
-        'code': 3,
-        'name': 'MOVE_CYLINDER'
+    MOVE_GRANULAR_MOTOR = {
+        'code': 102,
+        'name': 'MOVE_GRANULAR_MOTOR'
     }
-    VACUUM_GRANULAR_ON = {
-        'code': 4,
-        'name': 'VACUUM_GRANULAR_ON'
+
+    ON_CYLINDER_VACUUM = {
+        'code': 103,
+        'name': 'ON_CYLINDER_VACUUM'
     }
-    VACUUM_GRANULAR_OFF = {
-        'code': 5,
-        'name': 'VACUUM_GRANULAR_ON'
+    OFF_CYLINDER_VACUUM = {
+        'code': 104,
+        'name': 'OFF_CYLINDER_VACUUM'
     }
-    VACUUM_SOLID_ON = {
-        'code': 6,
-        'name': 'VACUUM_SOLID_ON'
+    ON_GRANULAR_VACUUM = {
+        'code': 105,
+        'name': 'ON_GRANULAR_VACUUM'
     }
-    VACUUM_SOLID_OFF = {
-        'code': 7,
-        'name': 'VACUUM_SOLID_OFF'
+    OFF_GRANULAR_VACUUM = {
+        'code': 106,
+        'name': 'OFF_GRANULAR_VACUUM'
     }
-    BLOWER_GRANULAR_ON = {
-        'code': 8,
-        'name': 'BLOWER_GRANULAR_ON'
+    ON_BLOWER = {
+        'code': 107,
+        'name': 'ON_BLOWER'
     }
-    BLOWER_GRANULAR_OFF = {
-        'code': 9,
-        'name': 'BLOWER_GRANULAR_OFF'
+    OFF_BLOWER = {
+        'code': 108,
+        'name': 'OFF_BLOWER'
     }
 
     ArduinoRequestTimeOut = 180
+
+
+    MAX_GRANULAR = 1650
+    MAX_CYLINDER = 9500
+    MAX_SYRINGE = 9000
 
 
 class EndEffectorInstructionObject:

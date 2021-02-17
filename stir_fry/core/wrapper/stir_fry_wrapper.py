@@ -282,3 +282,10 @@ class StirFryWrapper:
     def clean_error(self):
         self._has_error = False
         print('error had cleaned')
+
+
+if __name__ == '__main__':
+    wrapper = StirFryWrapper('192.168.1.168', module_name='MODULE_1')
+    print(wrapper.off_induction())
+    print(wrapper.off_induction())
+    print(wrapper.off_induction())

@@ -32,7 +32,7 @@ class XarmTransporter(threading.Thread):
     def return_right_2(self):
         raise NotImplementedError()
 
-    def return_to_requester(self, movement: BaseMotion):
+    def return_to_requester(self, movement: BaseMovement):
         if self.LEFT == self.requester:
             if movement.get_address() > 9:
                 self.return_left_2()

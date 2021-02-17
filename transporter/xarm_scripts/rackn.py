@@ -1,11 +1,11 @@
+from transporter.arm.xarm_wrapper import XArmWrapperSingleton
 from transporter.xarm_scripts.base_movement import BaseMovement
-from transporter.xarm_scripts.xarm_sdk import XArmSDKSingleton
 
 
 class RackN(BaseMovement):
     def run(self):
         super().run()
-        if isinstance(self.x_arm, XArmSDKSingleton):
+        if isinstance(self.x_arm, XArmWrapperSingleton):
             self.x_arm.set_is_arm_busy(True)
             self.x_arm.initial_position()
             self.x_arm.set_gripper_position(self.OPEN, wait=False, speed=5000)

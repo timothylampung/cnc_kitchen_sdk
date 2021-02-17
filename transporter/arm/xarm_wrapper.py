@@ -9,18 +9,6 @@ import traceback
 from math import sqrt
 from transporter.core.config.config import EndEffectorInstructionObject as DATA, EndEffectorInstructionReg as EIG
 from comm.arduino.arduino_udp import ArduinoUdp
-from transporter.xarm_scripts.racka import RackA
-from transporter.xarm_scripts.rackb import RackB
-from transporter.xarm_scripts.rackc import RackC
-from transporter.xarm_scripts.rackd import RackD
-from transporter.xarm_scripts.racke import RackE
-from transporter.xarm_scripts.rackf import RackF
-from transporter.xarm_scripts.rackg import RackG
-from transporter.xarm_scripts.rackh import RackH
-from transporter.xarm_scripts.racki import RackI
-from transporter.xarm_scripts.rackj import RackJ
-from transporter.xarm_scripts.rackk import RackK
-from transporter.xarm_scripts.rackl import RackL
 from utils.utils import obj_to_json_string as convert
 
 try:
@@ -77,12 +65,13 @@ class XArmWrapperSingleton:
             self.arm.connect()
             self.arm.clean_warn()
             self.arm.clean_error()
-            self.move_cylinder(0)
-            self.move_syringe(0)
-            self.move_puller(0)
-            self.granular_blower_off(0)
-            self.vacuum_granular_off(0)
-            self.granular_blower_off(0)
+            self.blower(0)
+            self.vacuum_granular(0)
+            self.vacuum_solid(0)
+            print(self.move_granular(0))
+            print(self.move_syringe(0))
+            print(self.move_cylinder(0))
+
             time.sleep(1)
             self.arm.motion_enable(True)
             self.arm.set_mode(0)
@@ -153,7 +142,7 @@ class XArmWrapperSingleton:
     # Register error/warn changed callback
     def location_change_callback(self, data):
         c = data['cartesian']
-        print(f'{c[0]} X {c[1]} = {self.is_working_envelope(c[0], c[1], c[2])}')
+        # print(f'{c[0]} X {c[1]} = {self.is_working_envelope(c[0], c[1], c[2])}')
         if self.is_working_envelope(c[0], c[1], c[2]):
             self.arm.emergency_stop()
         # if data and data['error_code'] != 0:
@@ -188,59 +177,74 @@ class XArmWrapperSingleton:
     def is_connected(self):
         return self.arm.connected
 
-    def move_puller(self, position):
-        if position > 9000:
+    def move_granular(self, position):
+        """
+        :param position: maximum value is 9000
+        :return:
+        """
+        if position > EIG.MAX_GRANULAR:
             print(f'invalid position : {position} is more than maximum position')
-            position = 13000
-
-        ret = self.end_effector.send(convert(DATA(EIG.MOVE_PULLER, position)))
+            position = EIG.MAX_GRANULAR
+        ret = self.end_effector.send(convert(DATA(EIG.MOVE_GRANULAR_MOTOR, position)))
+        print(ret)
         return ret[0]
 
     def move_syringe(self, position):
-        if position > 13000:
-            print(f'invalid position : {position} is more than maximum position')
-            position = 13000
+        """
+        :param position: maximum value is 13000
+        :return:
+        """
 
-        ret = self.end_effector.send(convert(DATA(EIG.MOVE_SYRINGE, position)))
+        if position > EIG.MAX_SYRINGE:
+            print(f'invalid position : {position} is more than maximum position')
+            position = EIG.MAX_SYRINGE
+
+        ret = self.end_effector.send(convert(DATA(EIG.MOVE_PULLER_MOTOR, position)))
+        print(ret)
         return ret[0]
 
     def move_cylinder(self, position):
-        if position > 13000:
+        """
+        :param position: maximum value is 13000
+        :return:
+        """
+        if position > EIG.MAX_CYLINDER:
             print(f'invalid position : {position} is more than maximum position')
-            position = 13000
-        ret = self.end_effector.send(convert(DATA(EIG.MOVE_CYLINDER, position)))
+            position = EIG.MAX_CYLINDER
+            self.end_effector.send(convert(DATA(EIG.MOVE_CYLINDER_MOTOR, position)))
+        ret = self.end_effector.send(convert(DATA(EIG.MOVE_CYLINDER_MOTOR, position)))
         print(ret)
         return ret[0]
 
-    def vacuum_granular_on(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_GRANULAR_ON, position)))
-        print(ret)
-        return ret[0]
+    def vacuum_solid(self, position):
+        if position == 0:
+            ret = self.end_effector.send(convert(DATA(EIG.OFF_CYLINDER_VACUUM, position)))
+            print(ret)
+            return ret[0]
+        else:
+            ret = self.end_effector.send(convert(DATA(EIG.ON_CYLINDER_VACUUM, position)))
+            print(ret)
+            return ret[0]
 
-    def vacuum_granular_off(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_GRANULAR_OFF, position)))
-        print(ret)
-        return ret[0]
+    def vacuum_granular(self, position):
+        if position == 0:
+            ret = self.end_effector.send(convert(DATA(EIG.OFF_GRANULAR_VACUUM, position)))
+            print(ret)
+            return ret[0]
+        else:
+            ret = self.end_effector.send(convert(DATA(EIG.ON_GRANULAR_VACUUM, position)))
+            print(ret)
+            return ret[0]
 
-    def granular_blower_on(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_GRANULAR_ON, position)))
-        print(ret)
-        return ret[0]
-
-    def granular_blower_off(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_GRANULAR_OFF, position)))
-        print(ret)
-        return ret[0]
-
-    def vacuum_solid_on(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_SOLID_ON, position)))
-        print(ret)
-        return ret[0]
-
-    def vacuum_solid_off(self, position):
-        ret = self.end_effector.send(convert(DATA(EIG.VACUUM_SOLID_OFF, position)))
-        print(ret)
-        return ret[0]
+    def blower(self, position):
+        if position == 0:
+            ret = self.end_effector.send(convert(DATA(EIG.OFF_BLOWER, position)))
+            print(ret)
+            return ret[0]
+        else:
+            ret = self.end_effector.send(convert(DATA(EIG.ON_BLOWER, position)))
+            print(ret)
+            return ret[0]
 
     def reset(self, speed=None, mvacc=None, mvtime=None, is_radian=None, wait=False, timeout=None):
         self.arm.reset(speed=speed, mvacc=mvacc, mvtime=mvtime, is_radian=is_radian, wait=wait, timeout=timeout)
@@ -251,6 +255,18 @@ class XArmWrapperSingleton:
 # chicken 55(gram) 11000 steps
 
 if __name__ == '__main__':
+    from transporter.xarm_scripts.racka import RackA
+    from transporter.xarm_scripts.rackb import RackB
+    from transporter.xarm_scripts.rackc import RackC
+    from transporter.xarm_scripts.rackd import RackD
+    from transporter.xarm_scripts.racke import RackE
+    from transporter.xarm_scripts.rackf import RackF
+    from transporter.xarm_scripts.rackg import RackG
+    from transporter.xarm_scripts.rackh import RackH
+    from transporter.xarm_scripts.racki import RackI
+    from transporter.xarm_scripts.rackj import RackJ
+    from transporter.xarm_scripts.rackk import RackK
+    from transporter.xarm_scripts.rackl import RackL
 
     x_arm_motions_directory = {
         1: {1: RackA(), 2: RackB(), 3: RackC(), 4: RackD(), 5: RackE(), 6: RackF()},
@@ -262,20 +278,20 @@ if __name__ == '__main__':
         print('return to left requester')
         from transporter.xarm_scripts.return_to_right_wok import ReturnToRightWok
         ret = ReturnToRightWok()
-        ret.set_ingredient({type : "SOLID"})
+        ret.set_type("SOLID")
         ret.run()
 
 
     def return_to_left_requester():
         from transporter.xarm_scripts.return_to_left_wok import ReturnToLeftWok
         ret = ReturnToLeftWok()
-        ret.set_ingredient({type : "SOLID"})
+        ret.set_type("SOLID")
         ret.run()
 
 
     motion = x_arm_motions_directory[1][1]
     motion.set_requester(requester_callback=return_to_right_requester)
-    motion.set_ingredient({type : "SOLID"})
+    motion.set_type("SOLID")
     arm: XArmWrapperSingleton = XArmWrapperSingleton.get_instance()
     while arm.is_arm_busy():
         pass
